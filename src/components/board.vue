@@ -8,7 +8,7 @@
       v-bind:showing=card.showing
       v-bind:index=index
       v-bind:flippable=card.flippable
-      v-bind:flips="flips"
+      v-bind:flips="flipped.length"
       v-on:flipCard="flipCard">
     </card>
 
@@ -24,9 +24,9 @@ export default {
   components: { card },
   data: function() {
     return {
-      turn: 0,
-      flips: 0,
-      pairs: 0,
+      turn: 0,      // turn number
+      pairs: 0,     // number of matches made
+      flipped: [],  // the cards that are flipped in this turn
       deck: {
         cards: [
           {
@@ -54,10 +54,55 @@ export default {
     }
   },
   methods: {
+
+    noMatchThisTurn: function(card0, card1) {
+      card0.flippable = true;
+      card0.showing = false;
+      card1.flippable = true;
+      card1.showing = false;
+      this.turn++;
+      this.flipped = [];
+
+      console.log('in noMatchThisTurn...last line');
+    },
+
     flipCard: function(index) {
       this.deck.cards[index].showing = !this.deck.cards[index].showing;
       this.deck.cards[index].flippable = false;
-      this.flips++;
+      this.flipped.push(index);
+      if (this.flipped.length == 2) {
+
+        if (
+          this.deck.cards[this.flipped[0]].face === 
+          this.deck.cards[this.flipped[1]].face) {
+
+            // we have a match!
+            this.turn++;
+            this.pairs++;
+            this.flipped = [];
+
+            // check for win
+            if (this.deck.cards.length/2 === this.pairs) {
+
+              // game is won!
+              alert('we won!');
+
+            }
+
+        }
+        else {
+
+          console.log('not a match, resetting cards');
+
+          // not a match, turn cards back over
+          setTimeout(function() { 
+            this.noMatchThisTurn(
+              this.deck.cards[this.flipped[0]],
+              this.deck.cards[this.flipped[1]]) }, 5000);
+
+        }
+
+      }
     }
   }
 
