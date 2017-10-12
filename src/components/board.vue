@@ -55,11 +55,11 @@ export default {
   },
   methods: {
 
-    noMatchThisTurn: function(card0, card1) {
-      card0.flippable = true;
-      card0.showing = false;
-      card1.flippable = true;
-      card1.showing = false;
+    noMatchThisTurn: function() {
+      this.deck.cards[this.flipped[0]].flippable = true;
+      this.deck.cards[this.flipped[0]].showing = false;
+      this.deck.cards[this.flipped[1]].flippable = true;
+      this.deck.cards[this.flipped[1]].showing = false;
       this.turn++;
       this.flipped = [];
 
@@ -95,10 +95,7 @@ export default {
           console.log('not a match, resetting cards');
 
           // not a match, turn cards back over
-          setTimeout(function() { 
-            this.noMatchThisTurn(
-              this.deck.cards[this.flipped[0]],
-              this.deck.cards[this.flipped[1]]) }, 5000);
+          setTimeout(this.noMatchThisTurn(), 5000);
 
         }
 
