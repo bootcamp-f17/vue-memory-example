@@ -3,9 +3,12 @@
   <div class="board">
   
     <card 
-      v-for="card in deck.cards" 
+      v-for="(card, index) in deck.cards" 
       v-bind:face=card.face
       v-bind:showing=card.showing
+      v-bind:index=index
+      v-bind:flippable=card.flippable
+      v-bind:flips="flips"
       v-on:flipCard="flipCard">
     </card>
 
@@ -21,31 +24,40 @@ export default {
   components: { card },
   data: function() {
     return {
+      turn: 0,
+      flips: 0,
+      pairs: 0,
       deck: {
         cards: [
           {
             face: 'A',
-            showing: true
+            showing: false,
+            flippable: true
           },
           {
             face: 'B',
-            showing: false
+            showing: false,
+            flippable: true
           },
           {
             face: 'B',
-            showing: false
+            showing: false,
+            flippable: true
           },
           {
             face: 'A',
-            showing: false
+            showing: false,
+            flippable: true
           }
         ]
       }
     }
   },
   methods: {
-    flipCard: function() {
-      alert("Flip card!");
+    flipCard: function(index) {
+      this.deck.cards[index].showing = !this.deck.cards[index].showing;
+      this.deck.cards[index].flippable = false;
+      this.flips++;
     }
   }
 

@@ -2,7 +2,7 @@
 
   <div 
     class="card" 
-    v-bind:class="{ 'back': showing }" v-on:click="flipCard">{{ face }}
+    v-bind:class="{ 'back': !showing }" v-on:click="flipCard">{{ face }}
   </div>
 
 </template>
@@ -11,14 +11,16 @@
 
 export default {
   name: 'card',
-  props: [ 'face', 'showing'],
+  props: [ 'face', 'showing', 'index', 'flippable', 'flips'],
   data: function() {
     return {
     }
   },
   methods: {
     flipCard: function() {
-      this.$emit('flipCard');
+      if (this.flippable && this.flips < 2) {
+        this.$emit('flipCard', this.index);
+      }
     }
   }
 
@@ -35,10 +37,11 @@ export default {
   border: 1px solid #ccc;
   display: inline-block;
   margin: 5px;
+  color: #000;
 }
 
 .back {
-  background-color: #ccc;
+  background-color: #000;
 }
 
 </style>
